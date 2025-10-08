@@ -3,6 +3,7 @@ import os
 import threading
 from openai import OpenAI
 from menu import run_cli
+import warnings
 
 client = OpenAI(
     base_url="https://router.huggingface.co/v1",
@@ -14,6 +15,8 @@ current_text = ""
 suggestion_timer = None
 current_commands = []
 loading_callback = None
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
 
 def get_suggestions(text, update_commands_callback):
     if not text.strip():
@@ -52,7 +55,7 @@ def on_text_change(text, update_commands_callback, set_loading):
         suggestion_timer.cancel()
     
     if text.strip():
-        suggestion_timer = threading.Timer(0.5, lambda: get_suggestions(text, update_commands_callback))
+        suggestion_timer = threading.Timer(0.3, lambda: get_suggestions(text, update_commands_callback))
         suggestion_timer.start()
     
 def log_command(cmd, output):
