@@ -1,5 +1,6 @@
 .zshrc -> 
 
+```zsh
 export HF_API_KEY="API_KEY"
 navi() {
     if (( $# > 0 )); then
