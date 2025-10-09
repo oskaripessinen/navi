@@ -1,6 +1,8 @@
 .zshrc -> 
 
-export HF_API_KEY="API_KEY"
+
+```zsh
+export $(grep -v '^#' ~/path/to/.env | xargs)
 navi() {
     if (( $# > 0 )); then
         case "$1" in
