@@ -26,8 +26,6 @@ navi() {
         rm -f "$tmp"
         return
     fi
-
-
     local tmp
     tmp=$(mktemp) || { echo "mktemp failed"; return 1; }
     (
