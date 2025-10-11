@@ -28,7 +28,7 @@ def ask_ai(question: str) -> str:
         resp = client.chat.completions.create(
             model="meta-llama/Llama-3.3-70B-Instruct",
             messages=[
-                {'role': 'system', 'content': 'You are a helpful CLI/Dev assistant. Return ONLY a JSON array of 1-5 command suggestions as strings and their short explanation in array format.'},
+                {'role': 'system', 'content': 'You are a helpful CLI/Dev assistant. Return ONLY a JSON array of 2-5 command suggestions as strings and their short explanation in array format.'},
                 {"role": "user", "content": question},
             ],
             max_tokens=400,
@@ -39,16 +39,20 @@ def ask_ai(question: str) -> str:
         commands = f"[{commands.strip()}]"
 
         commands = json.loads(commands)
+        print(commands)
 
+        choices = [
+            Choice(name=f"{cmd} --- {desc}", value=cmd)
+            for cmd, desc in commands
+        ]
 
-        command_dict = {cmd: desc for cmd, desc in commands}
-
-        choices = inquirer.select(
-            message="command --- description",
-            choices=list(command_dict.keys()),  
-            transformer=lambda result: f"{result} - {command_dict[result]}" 
+        selected = inquirer.select(
+            message="Select command:",
+            choices=choices,
+            wrap_lines=True
         ).execute()
-        return choices
+        
+        return selected
     except Exception as e:
         return f"Error: {e}"
 
